@@ -1,0 +1,16 @@
+export const nameMap: {[key: string]: string} = {
+    date: 'Dátum',
+    name: 'Név',
+    address: 'Lakcím',
+    taxID: 'AdóSzám',
+    originID: 'Származási Igazolvány Szám',
+    HLF: 'Hektoliterfok',
+    weightInKilograms: 'Tömeg',
+    Dátum: 'date',
+    Név: 'name',
+    Lakcím: 'address',
+    AdóSzám: 'taxID',
+    'Származási Igazolvány Szám': 'originID',
+    Hektoliterfok: 'HLF',
+    Tömeg: 'weightInKilograms',
+}

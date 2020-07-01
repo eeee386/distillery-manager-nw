@@ -1,0 +1,10 @@
+.tablelist-wrapper {
+  width: 450px;
+  .tablesort-buttons {
+    display: flex;
+    justify-content: space-between;
+    .button {
+      width: 150px;
+    }
+  }
+}

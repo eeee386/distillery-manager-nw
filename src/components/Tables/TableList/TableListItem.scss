@@ -1,0 +1,20 @@
+@import '../../../App';
+
+.tablelistitem-wrapper {
+  width: 100%;
+  .item-data {
+    display: flex;
+    justify-content: space-between;
+  }
+  .data-button-wrapper {
+    .button {
+      width: 50%
+    }
+  }
+
+  .show-button {
+    width: 100%;
+    display:flex;
+    justify-content: space-between;
+  }
+}
