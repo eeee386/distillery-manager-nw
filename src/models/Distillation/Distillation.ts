@@ -53,6 +53,10 @@ export class Distillation {
         })
     }
 
+    getLuxonDate(): DateTime {
+	    return DateTime.fromISO(this.date);
+    }
+
     static divideDistillationByYear(modelObjects: {[key: string]: any}[]): {[key: string]: Distillation[]} {
         const map: {[key: string]: Distillation[]} = {};
 
@@ -86,5 +90,17 @@ export class Distillation {
 
     static sumWeight(resultDocs: {[key: string]: any}[]): {[key: string]: number}  {
         return Distillation.sum(resultDocs, SumByTypes.WEIGHT);
+    }
+
+    static compareDates(a: Distillation, b: Distillation): number {
+        const aDate = a.getLuxonDate().startOf("day");
+        const bDate = b.getLuxonDate().startOf("day");
+        if(aDate < bDate) {
+            return -1;
+        } else if (bDate < aDate) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }

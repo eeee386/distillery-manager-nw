@@ -3,6 +3,7 @@ import {Distillation} from '../../../models/Distillation/Distillation';
 import TableListItem from './TableListItem';
 import {SortByTypes} from "../../../models/Enums/SortByTypes";
 import {DateTime} from 'luxon';
+import {SortDirections} from "../../../models/Enums/SortDirections";
 
 
 interface ITableListProps {
@@ -13,28 +14,55 @@ interface ITableListProps {
 
 export default class TableList extends React.Component<ITableListProps> {
     state = {
-        sortBy: SortByTypes.NONE
+        sortBy: SortByTypes.NONE,
+        onlyThisYear: false,
+        sortDirections: SortDirections.ASC,
+    }
+
+    handleSortTable = (table: Distillation[], compareFn: (a: Distillation, b: Distillation) => number): Distillation[] => {
+        const sortedArray = [...table].sort(compareFn)
+        return this.state.sortDirections === SortDirections.ASC ? sortedArray : sortedArray.reverse();
     }
 
     prepTable = (table: Distillation[]): Distillation[] => {
-        const {sortBy} = this.state;
+        const {sortBy, onlyThisYear} = this.state;
+        if(onlyThisYear) {
+            const thisYear = DateTime.local().year;
+            table = table.filter(e => e.getLuxonDate().year === thisYear);
+        }
         if(sortBy === SortByTypes.NAME){
-            return [...table].sort((a, b) => a.name.localeCompare(b.name))
+            return this.handleSortTable(table, (a, b) => a.name.localeCompare(b.name))
         } else if (sortBy === SortByTypes.DATE) {
-            return [...table].sort((a, b) => {
-                const aDate = DateTime.fromISO(a.date).startOf("day");
-                const bDate = DateTime.fromISO(b.date).startOf("day");
-                if(aDate < bDate) {
-                    return -1;
-                } else if (bDate < aDate) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            })
+            return this.handleSortTable(table, (a, b) => Distillation.compareDates(a, b))
         } else {
             return table;
         }
+    }
+
+    handleSort = (sortByArg: SortByTypes): void => {
+        const {sortBy, sortDirections} = this.state;
+        if(sortBy === sortByArg) {
+            if(sortDirections === SortDirections.ASC){
+                this.setState({sortDirections: SortDirections.DESC})
+            } else {
+                this.setState({sortDirections: SortDirections.ASC})
+            }
+        } else {
+            this.setState({sortBy: sortByArg})
+            this.setState({sortDirections: SortDirections.ASC})
+        }
+    }
+
+    getSortDirection = (sortByArg: SortByTypes): string => {
+        const {sortDirections, sortBy} = this.state;
+        if(sortBy !== sortByArg){
+            return ''
+        }
+        return sortDirections === SortDirections.ASC ? "Növekvő" : "Csökkenő";
+    }
+
+    onlyYearButtonText = () => {
+        return this.state.onlyThisYear ? "Összes" : "Csak ezévi";
     }
 
     render() {
@@ -42,9 +70,12 @@ export default class TableList extends React.Component<ITableListProps> {
         return (
             <div className={'tablelist-wrapper'}>
                 <div className={'tablesort-buttons'}>
-                    <button className={'button is-link'} onClick={() => this.setState({sortBy: SortByTypes.DATE})}>Rendezés dátum szerint</button>
-                    <button className={'button is-link'} onClick={() => this.setState({sortBy: SortByTypes.NAME})}>Rendezés név szerint</button>
+                    <button className={'button is-link'} onClick={() => this.handleSort(SortByTypes.DATE)}>Dátum szerint {this.getSortDirection(SortByTypes.DATE)}</button>
+                    <button className={'button is-link'} onClick={() => this.handleSort(SortByTypes.NAME)}>Név szerint {this.getSortDirection(SortByTypes.NAME)}</button>
                     <button className={'button is-link'} onClick={() => this.setState({sortBy: SortByTypes.NONE})}>Nincs rendezés</button>
+                </div>
+                <div>
+                    <button className={'button is-info'} onClick={() => this.setState({onlyThisYear : !this.state.onlyThisYear})}>{this.onlyYearButtonText()}</button>
                 </div>
                 {this.prepTable(table).map((data: Distillation) => (
                     <div key={data._id}>
