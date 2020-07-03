@@ -16,11 +16,11 @@ function* handleSearch(result: {activeName?: string, activeTaxID?: string, resul
     }
 }
 
-// TODO: find a more elegant solution to this.
 function* handleUpdateOrDelete(): IterableIterator<Effect> {
     const result = yield select((state: StateProps) => state.search[payloadNames.SEARCH_RESULT])
     if (result) {
-        handleSearch(result);
+        // @ts-ignore
+        yield call(() => handleSearch(result));
     } else {
         yield call(fetchDistillations)
         const table = yield select((state: StateProps) => state.tables[tablePayloadNames.TABLES]);
@@ -38,8 +38,6 @@ const sqlService = new SQLService();
 function* connectSql(): IterableIterator<Effect> {
     yield put(ActionFactory(tableTypes.CONNECTION_STARTED));
     try {
-        // TODO: this is only for clear the database
-        // yield call(sqlService.destroyDataBase);
         yield call(sqlService.createIndex);
         yield put(ActionFactory(tableTypes.CONNECTION_COMPLETED));
     } catch (error) {
@@ -54,7 +52,7 @@ function* watchConnectSql(): IterableIterator<Effect> {
 function* disconnectSql(): IterableIterator<Effect> {
     yield put(ActionFactory(tableTypes.DISCONNECTION_STARTED));
     try {
-        handleDisconnectAndCreate();
+        yield call(handleDisconnectAndCreate);
         yield put(ActionFactory(tableTypes.DISCONNECTION_COMPLETED));
     } catch (error) {
         yield put(ActionFactory(tableTypes.DISCONNECTION_FAILED));
@@ -88,7 +86,7 @@ function* createDistillation(action: Action): IterableIterator<Effect> {
         });
         yield put(ActionFactory(tableTypes.ADD_NEW_COMPLETED, newDist));
         yield call(fetchDistillations);
-        handleDisconnectAndCreate();
+        yield call(handleDisconnectAndCreate);
     } catch (error) {
         yield put(ActionFactory(tableTypes.ADD_NEW_FAILED, error));
     }
@@ -104,7 +102,7 @@ function* updateDistillation(action: Action): IterableIterator<Effect | undefine
         const payloadToSend = !!action.payload && !!tableSagaTypes.UPDATE_ONE.payloadName && action.payload[tableSagaTypes.UPDATE_ONE.payloadName];
         const updatedDistillation = yield call(() => sqlService.updateDistillation(payloadToSend));
         yield put(ActionFactory(tableTypes.UPDATE_ONE_COMPLETED, updatedDistillation));
-        handleUpdateOrDelete();
+        yield call(handleUpdateOrDelete);
     } catch (error) {
         yield put(ActionFactory(tableTypes.UPDATE_ONE_FAILED, error));
     }
@@ -121,7 +119,7 @@ function* deleteDistillation(action: Action): IterableIterator<Effect | undefine
         const payloadToSend = !!action.payload && !!tableSagaTypes.DELETE_ONE.payloadName && action.payload[tableSagaTypes.DELETE_ONE.payloadName];
         const deletedDistillation = yield call(() => sqlService.deleteDistillation(payloadToSend));
         yield put(ActionFactory(tableTypes.DELETE_ONE_COMPLETED, deletedDistillation));
-        handleUpdateOrDelete();
+        yield call(handleUpdateOrDelete);
     } catch (error) {
         yield put(ActionFactory(tableTypes.DELETE_ONE_FAILED, error));
     }
@@ -231,9 +229,9 @@ function* restoreDistillations(): IterableIterator<Effect> {
     yield put(ActionFactory(restoreTypes.START_RESTORE));
     try {
         yield call(() => sqlService.restoreDB());
-        yield put(ActionFactory(tableTypes.RESTORE_COMPLETED));
+        yield put(ActionFactory(restoreTypes.RESTORE_COMPLETED));
     } catch (error) {
-        yield put(ActionFactory(tableTypes.RESTORE_FAILED, error));
+        yield put(ActionFactory(restoreTypes.RESTORE_FAILED, error));
     }
 }
 

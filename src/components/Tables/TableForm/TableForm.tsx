@@ -29,7 +29,7 @@ class TableForm extends React.Component<InjectedFormProps<any, any, any> & {tabl
             {renderDatePickerField('Dátum', 'date')}
             {renderFormInput('Név', 'name', [Validators.required])}
             {renderFormInput('Lakcím', 'address')}
-            {renderFormInput('AdóSzám', 'taxID')}
+            {renderFormInput('AdóSzám', 'taxID', [Validators.TaxIDLength])}
             {renderFormInput('Származási Igazolvány Szám', 'originID')}
             {renderFormInput('Hektoliterfok', 'HLF')}
             {renderFormInput('Tömeg', 'weightInKilograms')}

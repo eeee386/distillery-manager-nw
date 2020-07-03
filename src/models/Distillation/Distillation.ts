@@ -103,4 +103,8 @@ export class Distillation {
             return 0;
         }
     }
+
+    equals(dist: Distillation): boolean {
+	    return Object.keys(this).map(key => this.toObject()[key] === dist.toObject()[key]).reduce((acc, curr) => acc && curr, true);
+    }
 }

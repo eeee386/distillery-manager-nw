@@ -25,6 +25,7 @@ class renderDatePicker extends React.Component<DatePickerProps> {
                     dateFormat="YYYY-MM-dd"
                     selected={input.value ? new Date(input.value) : null}
                     onChange={this.handleChange}
+                    autoComplete={"off"}
                 />
                 {touched && error && <span>{error}</span>}
             </div>

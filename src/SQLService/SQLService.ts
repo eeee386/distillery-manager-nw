@@ -1,7 +1,7 @@
 import {Distillation} from '../models/Distillation/Distillation'
 import PouchDB from 'pouchdb-browser';
 import find from 'pouchdb-find';
-import _ from 'lodash'
+import _ from 'lodash';
 const fs = require('fs');
 const nw = require('nw.gui')
 
@@ -74,16 +74,27 @@ export class SQLService {
     };
 
     restoreDB = async (): Promise<any> => {
-        const data = _.omit(SQLService.restoreData(), ["_id", "rev"]);
-        return await this.db.bulkDocs(data);
+        const dataInDatabase = (await this.findAll());
+        let data = SQLService.restoreData();
+        if(data?.length === dataInDatabase.length) {
+            for(let i = 0; i< data.length; i++){
+                if(dataInDatabase[i].equals(data[i])){
+                    return;
+                }
+            }
+        } else {
+            await this.destroyDataBase();
+            this.db = new PouchDB('Distillation');
+            return await this.db.bulkDocs(data?.map(e => _.omit(e.toObject(), ["_id", "_rev"])));
+        }
     }
 
-    destroyDataBase = async (): Promise<any> => {
+    destroyDataBase = async (): Promise<void> => {
         await this.db.destroy('Distillation')
     }
 
-    static restoreData(): any[] | undefined {
-        return JSON.parse(fs.readFileSync(`${nw.App.dataPath}/data.json`));
+    static restoreData(): Distillation[] | undefined {
+        return Distillation.fromObjects(JSON.parse(fs.readFileSync(`${nw.App.dataPath}/data.json`)));
     }
 
     static saveDataToFile(distillations: Distillation[] | undefined): void {

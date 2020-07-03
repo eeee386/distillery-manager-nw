@@ -6,7 +6,7 @@ interface InputProps {input: {[key:string]: any}, meta: {touched: boolean, error
 
 const formInput = (props: InputProps) => {
     const {touched, error} = props.meta;
-    return <div><input className="form-input" type='text' {...props.input}/>{touched && error && <span>{error}</span>}</div>
+    return <div className={"form-input-wrapper"}><input autoComplete={"on"} className="form-input" type='text' {...props.input}/>{touched && error && <span className={"form-input-error"}>{error}</span>}</div>
 };
 
 export const renderFormInput = (name: string, formName: string, validators?: Function[]) => {

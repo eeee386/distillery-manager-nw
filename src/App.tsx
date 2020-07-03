@@ -27,7 +27,7 @@ class App extends React.Component<ConnectedComponentProps> {
             <a className={'.navbar-link link'} href={'/search'}>Keresés</a>
             <a className={'.navbar-link link'} href={'/'}>Főzetések</a>
             <a className={'.navbar-link link'} href={'/sum'}>Összegzés</a>
-            <a className={'.navbar-link link'} href={'/restore'}>Összegzés</a>
+            <a className={'.navbar-link link'} href={'/restore'}>Visszaállítás</a>
           </div>
         </div>
         <Router>

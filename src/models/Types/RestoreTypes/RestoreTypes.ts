@@ -9,7 +9,7 @@ export enum payloadNames {
 }
 
 export const restoreSagaTypes: {[key: string]: SagaType} = {
-    RESTORE: new SagaType('RESTORE', 'name'),
+    RESTORE: new SagaType('RESTORE', 'restore'),
 };
 
 export const restoreTypes: {[key: string]: ReduxType} = {
