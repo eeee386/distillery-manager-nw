@@ -4,6 +4,7 @@ import {ActionFactory} from "../../ReduxStoreHandlers/actionFactory";
 import {restoreSagaTypes} from "../../models/Types/RestoreTypes/RestoreTypes";
 import {connect} from "react-redux";
 import {FunctionComponent} from "react";
+import './Restore.scss';
 
 interface RestoreProps {
     restore: () => void;
@@ -11,7 +12,7 @@ interface RestoreProps {
 
 const Restore: FunctionComponent<RestoreProps> = ({restore}) => {
     return (
-        <div>
+        <div className={"restore-wrapper"}>
             <div>Biztonsági visszaállítás (csak akkor ha elveszik az adat)</div>
             <button className={"button is-primary"} onClick={restore}>Visszaállítás</button>
         </div>

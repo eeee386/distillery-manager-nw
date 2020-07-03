@@ -14,7 +14,7 @@ interface ITableListProps {
 
 export default class TableList extends React.Component<ITableListProps> {
     state = {
-        sortBy: SortByTypes.NONE,
+        sortBy: SortByTypes.DATE,
         onlyThisYear: false,
         sortDirections: SortDirections.ASC,
     }
@@ -72,7 +72,6 @@ export default class TableList extends React.Component<ITableListProps> {
                 <div className={'tablesort-buttons'}>
                     <button className={'button is-link'} onClick={() => this.handleSort(SortByTypes.DATE)}>Dátum szerint {this.getSortDirection(SortByTypes.DATE)}</button>
                     <button className={'button is-link'} onClick={() => this.handleSort(SortByTypes.NAME)}>Név szerint {this.getSortDirection(SortByTypes.NAME)}</button>
-                    <button className={'button is-link'} onClick={() => this.setState({sortBy: SortByTypes.NONE})}>Nincs rendezés</button>
                 </div>
                 <div>
                     <button className={'button is-info'} onClick={() => this.setState({onlyThisYear : !this.state.onlyThisYear})}>{this.onlyYearButtonText()}</button>
