@@ -10,10 +10,13 @@
 @import '../node_modules/bulma/sass/layout/section.sass';
 @import '../node_modules/bulma/sass/elements/content.sass';
 
-.link {
-  margin: 10px;
-}
-
 .routeRoute {
   width: 100%;
+}
+.navbar .container {
+  display: flex;
+  justify-content: space-around;
+  .link {
+    margin: 10px;
+  }
 }

@@ -4,6 +4,7 @@ import TableListItem from './TableListItem';
 import {SortByTypes} from "../../../models/Enums/SortByTypes";
 import {DateTime} from 'luxon';
 import {SortDirections} from "../../../models/Enums/SortDirections";
+import "./TableList.scss"
 
 
 interface ITableListProps {

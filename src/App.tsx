@@ -1,54 +1,78 @@
 import * as React from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
 import {connect} from 'react-redux';
 import TableManager from './components/Tables/TableManager';
 import Search from './components/Search/Search';
-import { ActionFactory, Action } from './ReduxStoreHandlers/actionFactory';
-import { tableSagaTypes } from './models/Types/TableTypes/TableTypes';
-import { ConnectedComponentProps } from './models/ConnectTypes/ConnectTypes';
+import {ActionFactory, Action} from './ReduxStoreHandlers/actionFactory';
+import {tableSagaTypes} from './models/Types/TableTypes/TableTypes';
+import {ConnectedComponentProps} from './models/ConnectTypes/ConnectTypes';
 import Sum from "./components/Sum/Sum";
 import Restore from "./components/Restore/Restore";
 import MonthlySum from "./components/Sum/MonthlySum/MonthlySum";
+import {PageTypes} from "./models/Enums/PageTypes";
+import {Case} from "./components/UtilComponents/Case";
 
 class App extends React.Component<ConnectedComponentProps> {
-  constructor(props: ConnectedComponentProps) {
-    super(props);
-    props.connectSQL();
-  }
 
-  componentWillUnmount() {
-    this.props.disconnectSQL();
-  }
+    state = {
+        show: PageTypes.TABLE,
+    }
 
-  render() {
-    return (
-      <div className={'root'}>
-        <div className={'navbar'}>
-          <div className={'container'}>
-            <a className={'.navbar-link link'} href={'/search'}>Keresés</a>
-            <a className={'.navbar-link link'} href={'/'}>Főzetések</a>
-            <a className={'.navbar-link link'} href={'/sum'}>Összegzés</a>
-            <a className={'.navbar-link link'} href={'/monthlysum'}>Havi összegzés</a>
-            <a className={'.navbar-link link'} href={'/restore'}>Visszaállítás</a>
-          </div>
-        </div>
-        <Router>
-          <div className={'routeRoot'} style={{width: '100%'}}>
-            <Route exact path='/' component={TableManager} />
-            <Route exact path='/search' component={Search} />
-            <Route exact path='/sum' component={Sum} />
-            <Route exact path='/monthlysum' component={MonthlySum} />
-            <Route exact path='/restore' component={Restore} />
-          </div>
-        </Router>
-      </div>
-    );
-  }
+    constructor(props: ConnectedComponentProps) {
+        super(props);
+        props.connectSQL();
+    }
+
+    componentWillUnmount() {
+        this.props.disconnectSQL();
+    }
+
+    render() {
+        return (
+            <div className={'root'}>
+                <div className={'navbar'}>
+                    <div className={'container'}>
+                        <span className={'navbar-link link'}
+                             onClick={() => this.setState({show: PageTypes.SEARCH})}>Keresés
+                        </span>
+                        <span className={'navbar-link link'}
+                             onClick={() => this.setState({show: PageTypes.TABLE})}>Főzetések
+                        </span>
+                        <span className={'navbar-link link'}
+                             onClick={() => this.setState({show: PageTypes.SUM})}>Összegzés
+                        </span>
+                        <span className={'navbar-link link'}
+                             onClick={() => this.setState({show: PageTypes.MONTHLYSUM})}>Havi összegzés
+                        </span>
+                        <span className={'navbar-link link'}
+                             onClick={() => this.setState({show: PageTypes.RESTORE})}>Visszaállítás
+                        </span>
+                    </div>
+                </div>
+                <div className={'routeRoot'} style={{width: '100%'}}>
+                    <Case value={PageTypes.SEARCH} data={this.state.show}>
+                        <Search />
+                    </Case>
+                    <Case value={PageTypes.TABLE} data={this.state.show}>
+                        <TableManager/>
+                    </Case>
+                    <Case value={PageTypes.SUM} data={this.state.show}>
+                        <Sum/>
+                    </Case>
+                    <Case value={PageTypes.MONTHLYSUM} data={this.state.show}>
+                        <MonthlySum/>
+                    </Case>
+                    <Case value={PageTypes.RESTORE} data={this.state.show}>
+                        <Restore/>
+                    </Case>
+                </div>
+            </div>
+        );
+    }
 }
 
 const matchDispatchToProps = (dispatch: React.Dispatch<Action>) => ({
-  connectSQL: () => dispatch(ActionFactory(tableSagaTypes.CONNECT_SQL)),
-  disconnectSQL: () => dispatch(ActionFactory(tableSagaTypes.DISCONNECT_SQL)) 
+    connectSQL: () => dispatch(ActionFactory(tableSagaTypes.CONNECT_SQL)),
+    disconnectSQL: () => dispatch(ActionFactory(tableSagaTypes.DISCONNECT_SQL))
 });
 
-export default connect(null, matchDispatchToProps) (App);
+export default connect(null, matchDispatchToProps)(App);

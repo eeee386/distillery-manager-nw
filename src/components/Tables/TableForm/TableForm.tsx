@@ -10,11 +10,6 @@ const TABLE_FORM_NAME = 'TABLE_FORM';
 
 
 class TableForm extends React.Component<InjectedFormProps<Distillation, any, any>> {
-    constructor(props: InjectedFormProps<Distillation, any, any>) {
-        super(props);
-        console.log(props.initialValues)
-    }
-
     render() {
         return (
             <Form onSubmit={this.props.handleSubmit}>
@@ -22,7 +17,7 @@ class TableForm extends React.Component<InjectedFormProps<Distillation, any, any
                     {renderDatePickerField('Dátum', 'date')}
                     {renderFormInput('Név', 'name', [Validators.required])}
                     {renderFormInput('Lakcím', 'address')}
-                    {renderFormInput('AdóSzám', 'taxID', [Validators.TaxIDLength])}
+                    {renderFormInput('AdóSzám', 'taxID', [Validators.required, Validators.TaxIDLength])}
                     {renderFormInput('Származási Igazolvány Szám', 'originID')}
                     {renderFormInput('Hektoliterfok', 'HLF')}
                     {renderFormInput('Tömeg', 'weightInKilograms')}
