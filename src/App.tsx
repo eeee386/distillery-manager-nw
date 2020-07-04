@@ -8,6 +8,7 @@ import { tableSagaTypes } from './models/Types/TableTypes/TableTypes';
 import { ConnectedComponentProps } from './models/ConnectTypes/ConnectTypes';
 import Sum from "./components/Sum/Sum";
 import Restore from "./components/Restore/Restore";
+import MonthlySum from "./components/Sum/MonthlySum/MonthlySum";
 
 class App extends React.Component<ConnectedComponentProps> {
   constructor(props: ConnectedComponentProps) {
@@ -27,6 +28,7 @@ class App extends React.Component<ConnectedComponentProps> {
             <a className={'.navbar-link link'} href={'/search'}>Keresés</a>
             <a className={'.navbar-link link'} href={'/'}>Főzetések</a>
             <a className={'.navbar-link link'} href={'/sum'}>Összegzés</a>
+            <a className={'.navbar-link link'} href={'/monthlysum'}>Havi összegzés</a>
             <a className={'.navbar-link link'} href={'/restore'}>Visszaállítás</a>
           </div>
         </div>
@@ -35,6 +37,7 @@ class App extends React.Component<ConnectedComponentProps> {
             <Route exact path='/' component={TableManager} />
             <Route exact path='/search' component={Search} />
             <Route exact path='/sum' component={Sum} />
+            <Route exact path='/monthlysum' component={MonthlySum} />
             <Route exact path='/restore' component={Restore} />
           </div>
         </Router>

@@ -62,7 +62,7 @@ export default class TableListItem extends React.Component<ITableListItemProps> 
                 <button className={'button is-warning show-button'} onClick={this.showModeToggle}><span>{data.name}:</span><span>{data.date}</span></button>
                 {isShow && <Fragment>
                     {isEdit ? <TableForm onSubmit={this.onSubmitHandler}
-                                         form={`EditTableForm_${data._id}`}/> : this.renderDistillation(data)
+                                         form={`EditTableForm_${data._id}`} initialValues={data} /> : this.renderDistillation(data)
                     }
                     <div className={"data-button-wrapper"}>
                         <button className={'button is-primary'}

@@ -1,0 +1,15 @@
+@import "../../../App";
+
+.monthlysum-wrapper {
+  margin-left: 20px;
+  .box-title{
+    font-weight: bold;
+  }
+  .map-data-wrapper {
+    margin-top: 10px;
+    margin-left: 10px;
+    .map-month-data-wrapper {
+      margin-left: 10px;
+    }
+  }
+}
