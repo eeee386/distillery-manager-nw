@@ -2,24 +2,19 @@ import * as React from 'react';
 import {DateTime} from "luxon";
 import {Distillation} from "../../../models/Distillation/Distillation";
 import {SumByTypes} from "../../../models/Enums/SumByTypes";
-import {ConnectedComponentProps, ReduxState} from "../../../models/ConnectTypes/ConnectTypes";
-import {payloadNames, tableSagaTypes} from "../../../models/Types/TableTypes/TableTypes";
-import {connect} from "react-redux";
-import {Dispatch} from "redux";
-import {ActionFactory} from "../../../ReduxStoreHandlers/actionFactory";
+import {ConnectedComponentProps} from "../../../models/ConnectTypes/ConnectTypes";
 import {monthMap} from "./MonthMap";
 import {Fragment} from 'react';
 import "./MonthlySum.scss"
 
-class MonthlySum extends React.Component<ConnectedComponentProps> {
+interface MonthlySumProps {
+    table: Distillation[];
+}
+
+class MonthlySum extends React.Component<ConnectedComponentProps & MonthlySumProps> {
 
     state = {
         onlyThisYear: false
-    }
-
-    constructor(props: ConnectedComponentProps) {
-        super(props);
-        props.fetchDistillation();
     }
 
     prepData = (table: Distillation[], prop: SumByTypes): { [key: string]: { [key: string]: number } } | null => {
@@ -33,6 +28,7 @@ class MonthlySum extends React.Component<ConnectedComponentProps> {
             const thisYear = DateTime.local().year;
             table = table.filter(e => e.getLuxonDate().year === thisYear);
         }
+        table = [...table].sort((a, b) => Distillation.compareDates(a, b))
         const mapYear: { [key: string]: Distillation[] } = {};
         table.forEach(e => {
             if (!mapYear[getYear(e)]) {
@@ -40,7 +36,6 @@ class MonthlySum extends React.Component<ConnectedComponentProps> {
             }
             mapYear[getYear(e)].push(e);
         })
-        console.log(mapYear);
         const mapNumber: { [key: string]: { [key: string]: number } } = {};
         Object.keys(mapYear).forEach(year => {
             if (!mapNumber[year]) {
@@ -92,12 +87,4 @@ class MonthlySum extends React.Component<ConnectedComponentProps> {
     }
 }
 
-const mapStateToProps = (state: ReduxState) => ({
-    table: state.tables[payloadNames.TABLES],
-});
-
-const matchDispatchToProps = (dispatch: Dispatch) => ({
-    fetchDistillation: () => dispatch(ActionFactory(tableSagaTypes.FETCH_TABLE)),
-})
-
-export default connect(mapStateToProps, matchDispatchToProps)(MonthlySum);
+export default MonthlySum;

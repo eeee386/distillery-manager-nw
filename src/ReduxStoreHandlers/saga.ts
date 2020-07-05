@@ -19,7 +19,6 @@ function* handleSearch(result: {activeName?: string, activeTaxID?: string, resul
 function* handleUpdateOrDelete(): IterableIterator<Effect> {
     const result = yield select((state: StateProps) => state.search[payloadNames.SEARCH_RESULT])
     if (result) {
-        // @ts-ignore
         yield call(() => handleSearch(result));
     } else {
         yield call(fetchDistillations)

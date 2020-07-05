@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import TableManager from './components/Tables/TableManager';
 import Search from './components/Search/Search';
 import {ActionFactory, Action} from './ReduxStoreHandlers/actionFactory';
-import {tableSagaTypes} from './models/Types/TableTypes/TableTypes';
-import {ConnectedComponentProps} from './models/ConnectTypes/ConnectTypes';
+import {payloadNames, tableSagaTypes} from './models/Types/TableTypes/TableTypes';
+import {ConnectedComponentProps, ReduxState} from './models/ConnectTypes/ConnectTypes';
 import Sum from "./components/Sum/Sum";
 import Restore from "./components/Restore/Restore";
 import MonthlySum from "./components/Sum/MonthlySum/MonthlySum";
@@ -20,6 +20,7 @@ class App extends React.Component<ConnectedComponentProps> {
     constructor(props: ConnectedComponentProps) {
         super(props);
         props.connectSQL();
+        props.fetchDistillation();
     }
 
     componentWillUnmount() {
@@ -53,13 +54,13 @@ class App extends React.Component<ConnectedComponentProps> {
                         <Search />
                     </Case>
                     <Case value={PageTypes.TABLE} data={this.state.show}>
-                        <TableManager/>
+                        <TableManager table={this.props.table}/>
                     </Case>
                     <Case value={PageTypes.SUM} data={this.state.show}>
                         <Sum/>
                     </Case>
                     <Case value={PageTypes.MONTHLYSUM} data={this.state.show}>
-                        <MonthlySum/>
+                        <MonthlySum table={this.props.table}/>
                     </Case>
                     <Case value={PageTypes.RESTORE} data={this.state.show}>
                         <Restore/>
@@ -70,9 +71,14 @@ class App extends React.Component<ConnectedComponentProps> {
     }
 }
 
-const matchDispatchToProps = (dispatch: React.Dispatch<Action>) => ({
-    connectSQL: () => dispatch(ActionFactory(tableSagaTypes.CONNECT_SQL)),
-    disconnectSQL: () => dispatch(ActionFactory(tableSagaTypes.DISCONNECT_SQL))
+const mapStateToProps = (state: ReduxState) => ({
+    table: state.tables[payloadNames.TABLES],
 });
 
-export default connect(null, matchDispatchToProps)(App);
+const matchDispatchToProps = (dispatch: React.Dispatch<Action>) => ({
+    connectSQL: () => dispatch(ActionFactory(tableSagaTypes.CONNECT_SQL)),
+    disconnectSQL: () => dispatch(ActionFactory(tableSagaTypes.DISCONNECT_SQL)),
+    fetchDistillation: () => dispatch(ActionFactory(tableSagaTypes.FETCH_TABLE)),
+});
+
+export default connect(mapStateToProps, matchDispatchToProps)(App);

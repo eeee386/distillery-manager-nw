@@ -8,7 +8,7 @@ const nw = require('nw.gui')
 
 export class SQLService {
 
-    db: any;
+    db: PouchDB.Database;
 
     constructor(){
         PouchDB.plugin(find);
@@ -16,8 +16,8 @@ export class SQLService {
     }
 
 
-    createIndex = async () => {
-        return await this.db.createIndex({
+    createIndex = () => {
+        return this.db.createIndex({
             index: {fields: ['name', 'taxID']}
         });
     };
@@ -90,7 +90,7 @@ export class SQLService {
     }
 
     destroyDataBase = async (): Promise<void> => {
-        await this.db.destroy('Distillation')
+        await this.db.destroy();
     }
 
     static restoreData(): Distillation[] | undefined {
