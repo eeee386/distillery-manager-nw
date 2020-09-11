@@ -8,7 +8,7 @@ import {Distillation} from "../models/Distillation/Distillation";
 import {sumSagaTypes, sumTypes} from "../models/Types/SumTypes/SumTypes";
 import {restoreSagaTypes, restoreTypes} from "../models/Types/RestoreTypes/RestoreTypes";
 
-function* handleSearch(result: {activeName?: string, activeTaxID?: string, results: Distillation[]}) {
+function* handleSearch(result: {activeName?: string, activeTaxID?: string, results: Distillation[]}): IterableIterator<Effect> {
     if (result.activeName) {
         yield put(ActionFactory(searchSagaTypes.SEARCH_BY_NAME, result.activeName))
     } else {
@@ -95,7 +95,7 @@ function* watchCreateDistillation(): IterableIterator<Effect> {
     yield takeEvery(tableSagaTypes.ADD_NEW.typeName, createDistillation);
 }
 
-function* updateDistillation(action: Action): IterableIterator<Effect | undefined> {
+function* updateDistillation(action: Action): IterableIterator<Effect> {
     yield put(ActionFactory(tableTypes.UPDATE_ONE_STARTED));
     try {
         const payloadToSend = !!action.payload && !!tableSagaTypes.UPDATE_ONE.payloadName && action.payload[tableSagaTypes.UPDATE_ONE.payloadName];
@@ -112,7 +112,7 @@ function* watchUpdateDistillation(): IterableIterator<Effect> {
 }
 
 
-function* deleteDistillation(action: Action): IterableIterator<Effect | undefined> {
+function* deleteDistillation(action: Action): IterableIterator<Effect> {
     yield put(ActionFactory(tableTypes.DELETE_ONE_STARTED));
     try {
         const payloadToSend = !!action.payload && !!tableSagaTypes.DELETE_ONE.payloadName && action.payload[tableSagaTypes.DELETE_ONE.payloadName];
@@ -128,7 +128,7 @@ function* watchDeleteDistillation(): IterableIterator<Effect> {
     yield takeEvery(tableSagaTypes.DELETE_ONE.typeName, deleteDistillation);
 }
 
-function* searchByName(action: Action): IterableIterator<Effect | undefined> {
+function* searchByName(action: Action): IterableIterator<Effect> {
     const {payload, payloadName} = action;
     yield put(ActionFactory(searchTypes.START_SEARCH_BY_NAME));
     try {
@@ -144,7 +144,7 @@ function* watchSearchByName(): IterableIterator<Effect> {
     yield takeEvery(searchSagaTypes.SEARCH_BY_NAME.typeName, searchByName);
 }
 
-function* searchByTaxID(action: Action): IterableIterator<Effect | undefined> {
+function* searchByTaxID(action: Action): IterableIterator<Effect> {
     const {payload, payloadName} = action;
     yield put(ActionFactory(searchTypes.START_SEARCH_BY_TAXID));
     try {
@@ -160,7 +160,7 @@ function* watchSearchByTaxID(): IterableIterator<Effect> {
     yield takeEvery(searchSagaTypes.SEARCH_BY_TAXID.typeName, searchByTaxID);
 }
 
-function* sumHLFByName(action: Action): IterableIterator<Effect | undefined> {
+function* sumHLFByName(action: Action): IterableIterator<Effect> {
     const {payload, payloadName} = action;
     yield put(ActionFactory(sumTypes.START_SUM_HLF_BY_NAME));
     try {
@@ -208,7 +208,7 @@ function* watchSumHLFByTaxID(): IterableIterator<Effect> {
     yield takeEvery(sumSagaTypes.SUM_HLF_BY_TAXID.typeName, sumHLFByTaxID);
 }
 
-function* sumWeightByTaxID(action: Action): IterableIterator<Effect | undefined> {
+function* sumWeightByTaxID(action: Action): IterableIterator<Effect> {
     const {payload, payloadName} = action;
     yield put(ActionFactory(sumTypes.START_SUM_WEIGHT_BY_TAXID));
     try {
