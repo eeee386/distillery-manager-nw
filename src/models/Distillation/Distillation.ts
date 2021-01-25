@@ -11,6 +11,7 @@ export class Distillation {
     HLF: string;
     weightInKilograms: string;
     _rev: string;
+    createdAt: number;
 
 
 	constructor(
@@ -23,6 +24,7 @@ export class Distillation {
         weightInKilograms: string,
         _id: string,
         _rev: string,
+        createdAt: number
         ) {
             this._id = _id;
             this.date = date;
@@ -33,6 +35,7 @@ export class Distillation {
             this.HLF = HLF;
             this.weightInKilograms = weightInKilograms;
             this._rev = _rev;
+            this.createdAt = createdAt;
     }
     
     toObject(): {[key: string]: any} {
@@ -40,21 +43,24 @@ export class Distillation {
     }
 
     static fromObject(modelObject: {[key: string]: any}): Distillation {
-        const {_id, date, address, name, taxID, originID, HLF, weightInKilograms, _rev} = modelObject;
-        return new Distillation(date, name, address, taxID, originID, HLF, weightInKilograms, _id, _rev)
+        const {_id, date, address, name, taxID, originID, HLF, weightInKilograms, _rev, createdAt} = modelObject;
+        return new Distillation(date, name, address, taxID, originID, HLF, weightInKilograms, _id, _rev, createdAt)
     }
 
     static fromObjects(modelObjects: {[key: string]: any}[]): Distillation[] {
 
         const models: any[] = modelObjects
         return models.map((item: any) => {
-            const {_id, date, address, name, taxID, originID, HLF, weightInKilograms, _rev} = item;
-            return new Distillation(date, name, address, taxID, originID, HLF, weightInKilograms, _id, _rev)
+            return this.fromObject(item);
         })
     }
 
+    private getISODateString(): string {
+	    return this.date.replaceAll(". ", "-").replace(".", "");
+    }
+
     getLuxonDate(): DateTime {
-	    return DateTime.fromISO(this.date);
+	    return DateTime.fromISO(this.getISODateString());
     }
 
     static divideDistillationByYear(modelObjects: {[key: string]: any}[]): {[key: string]: Distillation[]} {
@@ -102,6 +108,10 @@ export class Distillation {
         } else {
             return 0;
         }
+    }
+
+    static compareCreation(a: Distillation, b: Distillation): number {
+	    return a.createdAt - b.createdAt;
     }
 
     equals(dist: Distillation): boolean {

@@ -9,7 +9,7 @@ interface DatePickerProps {input: {onChange: Function, value: string}, meta: {to
 class renderDatePicker extends React.Component<DatePickerProps> {
 
     handleChange = (date: Date) => {
-        this.props.input.onChange(date.toISOString().slice(0, 10))
+        this.props.input.onChange(date.toLocaleDateString());
     };
 
     render () {

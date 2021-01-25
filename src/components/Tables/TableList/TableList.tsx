@@ -21,7 +21,8 @@ export default class TableList extends React.Component<ITableListProps> {
     }
 
     handleSortTable = (table: Distillation[], compareFn: (a: Distillation, b: Distillation) => number): Distillation[] => {
-        const sortedArray = [...table].sort(compareFn)
+        const preSortedArray = [...table].sort(Distillation.compareCreation);
+        const sortedArray = [...preSortedArray].sort(compareFn);
         return this.state.sortDirections === SortDirections.ASC ? sortedArray : sortedArray.reverse();
     }
 
@@ -29,6 +30,7 @@ export default class TableList extends React.Component<ITableListProps> {
         const {sortBy, onlyThisYear} = this.state;
         if(onlyThisYear) {
             const thisYear = DateTime.local().year;
+            console.log(table[0].getLuxonDate());
             table = table.filter(e => e.getLuxonDate().year === thisYear);
         }
         if(sortBy === SortByTypes.NAME){

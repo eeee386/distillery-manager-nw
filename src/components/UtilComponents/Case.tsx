@@ -8,6 +8,5 @@ interface CaseProps {
 }
 
 export const Case = ({value, data, children}: CaseProps): JSX.Element => {
-    console.log(children);
     return <Fragment>{value === data && children}</Fragment>
 }

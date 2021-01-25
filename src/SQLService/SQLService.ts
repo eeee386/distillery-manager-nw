@@ -57,7 +57,7 @@ export class SQLService {
     };
 
     createNewDistillation = async (modelObject: {[key: string]: any}): Promise<Distillation> => {
-        const result = await this.db.post(modelObject);
+        const result = await this.db.post({...modelObject, createdAt: new Date().getTime()});
         const found = await this.db.get(result.id);
         return Distillation.fromObject(found);
     };

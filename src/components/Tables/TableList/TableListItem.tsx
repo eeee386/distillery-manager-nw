@@ -23,7 +23,7 @@ export default class TableListItem extends React.Component<ITableListItemProps> 
 
     renderDistillation = (data: Distillation) => {
         let dataObject = data.toObject();
-        dataObject = _.omit(dataObject, ['_id', '_rev']);
+        dataObject = _.omit(dataObject, ['_id', '_rev', 'createdAt']);
         return Object.keys(dataObject).map((key: string) => <div className={"item-data"} key={`${key}-${data._id}`}>
             <span>{nameMap[key]}:</span><span>{dataObject[key]}</span></div>)
     };

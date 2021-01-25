@@ -62,6 +62,7 @@
   "nwBuilder": {
     "//": "https://github.com/nwjs-community/nw-builder",
     "platforms": [
+      "win64"
     ],
     "version": "latest",
     "flavor": "normal",
