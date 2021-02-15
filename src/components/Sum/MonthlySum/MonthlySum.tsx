@@ -6,6 +6,7 @@ import {ConnectedComponentProps} from "../../../models/ConnectTypes/ConnectTypes
 import {monthMap} from "./MonthMap";
 import {Fragment} from 'react';
 import "./MonthlySum.scss"
+import {stringToFloat, truncFloat} from "../../../utils/utils";
 
 interface MonthlySumProps {
     table: Distillation[];
@@ -45,7 +46,8 @@ class MonthlySum extends React.Component<ConnectedComponentProps & MonthlySumPro
                 if (!mapNumber[year][getMonth(dist)]) {
                     mapNumber[year][getMonth(dist)] = 0
                 }
-                mapNumber[year][getMonth(dist)] += prop === SumByTypes.WEIGHT ? parseFloat(dist.weightInKilograms.replace(",", ".")) : parseFloat(dist.HLF.replace(",", "."));
+                mapNumber[year][getMonth(dist)] += prop === SumByTypes.WEIGHT ? stringToFloat(dist.weightInKilograms) : stringToFloat(dist.HLF);
+                mapNumber[year][getMonth(dist)] = truncFloat(mapNumber[year][getMonth(dist)]);
             })
         })
         return mapNumber;

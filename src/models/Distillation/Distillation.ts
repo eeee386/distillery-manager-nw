@@ -1,5 +1,6 @@
 import {DateTime} from "luxon";
 import {SumByTypes} from "../Enums/SumByTypes";
+import {stringToFloat, truncFloat} from "../../utils/utils";
 
 export class Distillation {
     _id: string;
@@ -82,9 +83,9 @@ export class Distillation {
         const resultMap: {[key: string]: number} = {}
         Object.keys(data).forEach(year => {
             if(propToSum === SumByTypes.HLF){
-                resultMap[year] = data[year].reduce((acc: number, curr: Distillation) => acc + parseFloat(curr.HLF.replace(",", ".")), 0)
+                resultMap[year] = truncFloat(data[year].reduce((acc: number, curr: Distillation) => acc + stringToFloat(curr.HLF), 0));
             } else {
-                resultMap[year] = data[year].reduce((acc: number, curr: Distillation) => acc + parseFloat(curr.weightInKilograms.replace(",", '.')), 0)
+                resultMap[year] = truncFloat(data[year].reduce((acc: number, curr: Distillation) => acc + stringToFloat(curr.weightInKilograms), 0));
             }
         })
         return resultMap;
