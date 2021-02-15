@@ -16,10 +16,9 @@ class Sum extends React.Component<ConnectedComponentProps> {
     renderResults(): JSX.Element | null {
         if(this.props.result){
             const {activeName, activeTaxID, result} = this.props.result;
-            console.log(activeTaxID);
             if(!_.isEmpty(result)){
                 return <Fragment>{Object.keys(this.props.result.result).map((key: string) => <div className={"sum-data"} key={`${key}-${this.props.result.result[key]}`}>
-                    <span>{key}-ben:</span><span>{this.props.result.result[key]}</span></div>)}</Fragment>
+                    <span>Eredmény: </span><span>{this.props.result.result[key]}</span></div>)}</Fragment>
             } else {
                 return <div>Nincs találat erre a keresésre: {activeName ? `Név: ${activeName}` : `AdóSzám: ${activeTaxID}`}</div>
             }
@@ -28,7 +27,6 @@ class Sum extends React.Component<ConnectedComponentProps> {
     }
 
     render(): JSX.Element {
-        console.log(this.props.result);
         return (
             <div className={"sum-wrapper"}>
                 <SumHLFByNameForm onSubmit={this.props.sumHLFByName} form={'SumHLFByNameForm'} />
