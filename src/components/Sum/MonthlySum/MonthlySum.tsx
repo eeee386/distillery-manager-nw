@@ -45,7 +45,7 @@ class MonthlySum extends React.Component<ConnectedComponentProps & MonthlySumPro
                 if (!mapNumber[year][getMonth(dist)]) {
                     mapNumber[year][getMonth(dist)] = 0
                 }
-                mapNumber[year][getMonth(dist)] += prop === SumByTypes.WEIGHT ? parseFloat(dist.weightInKilograms) : parseFloat(dist.HLF);
+                mapNumber[year][getMonth(dist)] += prop === SumByTypes.WEIGHT ? parseFloat(dist.weightInKilograms.replace(",", ".")) : parseFloat(dist.HLF.replace(",", "."));
             })
         })
         return mapNumber;
